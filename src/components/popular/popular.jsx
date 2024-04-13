@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { baseUrl } from "../../helpers/Constants";
 import Item from "../item/item";
 import "./popular.css";
 
@@ -6,7 +7,7 @@ const Popular = () => {
   const [newCollection, setNewCollection] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:4000/popularInWomen")
+    fetch(`${baseUrl}/popularInWomen`)
       .then((response) => response.json())
       .then((data) => setNewCollection(data));
   }, []);
