@@ -21,17 +21,21 @@ const ShopContextProvider = (props) => {
       .then((data) => setAllProducts(data));
 
     if (localStorage.getItem("auth-token")) {
-      fetch(`${baseUrl}/getCart`, {
-        method: "POST",
-        headers: {
-          Accept: "application/data",
-          "auth-token": `${localStorage.getItem("auth-token")}`,
-          "Content-Type": "application/json",
-        },
-        body: "",
-      })
-        .then((response) => response.json())
-        .then((data) => setCartItems(data));
+      try {
+        fetch(`${baseUrl}/getCart`, {
+          method: "POST",
+          headers: {
+            Accept: "application/data",
+            "auth-token": `${localStorage.getItem("auth-token")}`,
+            "Content-Type": "application/json",
+          },
+          body: "",
+        })
+          .then((response) => response.json())
+          .then((data) => setCartItems(data));
+      } catch (error) {
+        setCartItems([]);
+      }
     }
   }, []);
 
