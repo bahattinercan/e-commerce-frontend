@@ -1,70 +1,16 @@
-# Getting Started with Create React App
+E-Commerce Frontend - Responsive (React)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Login - Signup - Ürün ekleme ve çıkartma işlemleri yapılabiliyor.
 
-## Available Scripts
-
-In the project directory, you can run:
-
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+![Ekran görüntüsü 2024-04-13 212302](https://github.com/bahattinercan/e-commerce-frontend/assets/92323340/a1dba4b9-9dd4-4dda-a950-3f8051bdcbc0)
+![Ekran görüntüsü 2024-04-13 212318](https://github.com/bahattinercan/e-commerce-frontend/assets/92323340/308d0b41-8171-492b-a214-7723da6a19c8)
+![Ekran görüntüsü 2024-04-13 212322](https://github.com/bahattinercan/e-commerce-frontend/assets/92323340/c7d91074-fe1d-4d9b-84b8-8ccccf983bef)
+![Ekran görüntüsü 2024-04-13 212328](https://github.com/bahattinercan/e-commerce-frontend/assets/92323340/b78424d0-1b54-45cc-828a-021053ea469f)
+![Ekran görüntüsü 2024-04-13 212359](https://github.com/bahattinercan/e-commerce-frontend/assets/92323340/4694174c-c2dd-45b2-8f39-6aa55917a863)
+![Ekran görüntüsü 2024-04-13 212407](https://github.com/bahattinercan/e-commerce-frontend/assets/92323340/348e80ed-02c0-44a3-91f9-016e3c7a81bc)
+![Ekran görüntüsü 2024-04-13 212422](https://github.com/bahattinercan/e-commerce-frontend/assets/92323340/367a9b33-523e-4cda-a03d-ed6a43400178)
+![Ekran görüntüsü 2024-04-13 212426](https://github.com/bahattinercan/e-commerce-frontend/assets/92323340/99a73e40-62ad-4ac8-bccf-418cdea45ece)
+![Ekran görüntüsü 2024-04-13 212440](https://github.com/bahattinercan/e-commerce-frontend/assets/92323340/5905c488-0faf-4638-b23e-c75a8343b96f)
+![Ekran görüntüsü 2024-04-13 212444](https://github.com/bahattinercan/e-commerce-frontend/assets/92323340/d4c2175b-60e6-4ce5-b846-0106027a93a9)
+![Ekran görüntüsü 2024-04-13 212453](https://github.com/bahattinercan/e-commerce-frontend/assets/92323340/44082ecb-5d3b-47b3-88bc-4a3636c29b88)
+![Ekran görüntüsü 2024-04-13 212458](https://github.com/bahattinercan/e-commerce-frontend/assets/92323340/85370829-f998-4333-a83a-abf2b5a437ca)
