@@ -9,52 +9,45 @@ const LoginSignup = () => {
   const changeHandler = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-  const login = async () => {
-    let responseData;
-    try {
-      await fetch(`${baseUrl}/login`, {
-        method: "POST",
-        headers: {
-          Accept: "application/form-data",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      })
-        .then((response) => response.json())
-        .then((data) => (responseData = data));
-    } catch (error) {
-      alert("Could not reach the server. Please try again.");
-      return;
-    }
+
+  const request = async (path) => {
+    const response = await fetch(`${baseUrl}/${path}`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+    return response.json();
+  };
+
+  const finish = (responseData, fallback) => {
     if (responseData?.success) {
-      localStorage.setItem("auth-token", responseData.token);
+      // UI flag only: the session itself is an httpOnly cookie on the server.
+      localStorage.setItem("logged-in", "1");
       window.location.replace("/");
     } else {
-      alert(responseData?.errors ?? "Login failed.");
+      alert(responseData?.errors ?? fallback);
     }
   };
-  const signup = async () => {
-    let responseData;
+
+  const login = async () => {
     try {
-      await fetch(`${baseUrl}/signup`, {
-        method: "POST",
-        headers: {
-          Accept: "application/form-data",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      })
-        .then((response) => response.json())
-        .then((data) => (responseData = data));
+      finish(await request("login"), "Login failed.");
     } catch (error) {
+      console.error("Login failed:", error);
       alert("Could not reach the server. Please try again.");
-      return;
     }
-    if (responseData?.success) {
-      localStorage.setItem("auth-token", responseData.token);
-      window.location.replace("/");
-    } else {
-      alert(responseData?.errors ?? "Sign up failed.");
+  };
+
+  const signup = async () => {
+    try {
+      finish(await request("signup"), "Sign up failed.");
+    } catch (error) {
+      console.error("Sign up failed:", error);
+      alert("Could not reach the server. Please try again.");
     }
   };
 
@@ -80,6 +73,7 @@ const LoginSignup = () => {
             onChange={changeHandler}
             type="email"
             placeholder="Email Address"
+            autoComplete="email"
           />
           <input
             name="password"
@@ -87,6 +81,7 @@ const LoginSignup = () => {
             onChange={changeHandler}
             type="password"
             placeholder="Password"
+            autoComplete={state === "Sign Up" ? "new-password" : "current-password"}
           />
         </div>
         <button

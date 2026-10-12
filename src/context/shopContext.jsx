@@ -3,6 +3,10 @@ import { baseUrl } from "../helpers/Constants";
 
 export const ShopContext = createContext(null);
 
+// The session cookie is httpOnly and owned by the backend; the SPA never sees
+// the token. This flag is only a UI hint (which button to show).
+const isLoggedIn = () => localStorage.getItem("logged-in") === "1";
+
 const getDefaultCart = () => {
   let cart = {};
   for (let i = 0; i < 300 + 1; i++) {
@@ -21,57 +25,55 @@ const ShopContextProvider = (props) => {
       .then((data) => setAllProducts(data))
       .catch(() => setAllProducts([]));
 
-    if (localStorage.getItem("auth-token")) {
+    if (isLoggedIn()) {
       fetch(`${baseUrl}/getCart`, {
         method: "POST",
+        credentials: "include",
         headers: {
-          Accept: "application/data",
-          "auth-token": `${localStorage.getItem("auth-token")}`,
+          Accept: "application/json",
           "Content-Type": "application/json",
         },
         body: "",
       })
         .then((response) => response.json())
-        .then((data) => setCartItems(data))
+        .then((data) => setCartItems(data || getDefaultCart()))
         .catch(() => setCartItems(getDefaultCart()));
     }
   }, []);
 
   const addToCart = (itemId) => {
     setCartItems((prev) => ({ ...prev, [itemId]: (prev[itemId] || 0) + 1 }));
-    if (localStorage.getItem("auth-token")) {
+    if (isLoggedIn()) {
       fetch(`${baseUrl}/addToCart`, {
         method: "POST",
+        credentials: "include",
         headers: {
-          Accept: "application/data",
-          "auth-token": `${localStorage.getItem("auth-token")}`,
+          Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          itemId: itemId,
-        }),
+        body: JSON.stringify({ itemId: itemId }),
       })
         .then((response) => response.json())
-        .then((data) => console.log("item added to cart"));
+        .then(() => console.log("item added to cart"))
+        .catch((error) => console.error("Could not add item to cart:", error));
     }
   };
 
   const removeFromCart = (itemId) => {
     setCartItems((prev) => ({ ...prev, [itemId]: Math.max((prev[itemId] || 0) - 1, 0) }));
-    if (localStorage.getItem("auth-token")) {
+    if (isLoggedIn()) {
       fetch(`${baseUrl}/removeFromCart`, {
         method: "POST",
+        credentials: "include",
         headers: {
-          Accept: "application/data",
-          "auth-token": `${localStorage.getItem("auth-token")}`,
+          Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          itemId: itemId,
-        }),
+        body: JSON.stringify({ itemId: itemId }),
       })
         .then((response) => response.json())
-        .then((data) => console.log("item removed from cart"));
+        .then(() => console.log("item removed from cart"))
+        .catch((error) => console.error("Could not remove item from cart:", error));
     }
   };
 
@@ -79,7 +81,7 @@ const ShopContextProvider = (props) => {
     let totalAmount = 0;
     for (const item in cartItems) {
       if (cartItems[item] > 0) {
-        let itemInfo = allProducts.find((product) => product.id === Number(item));
+        const itemInfo = allProducts.find((product) => product.id === Number(item));
         if (itemInfo) {
           totalAmount += itemInfo.new_price * cartItems[item];
         }
@@ -98,7 +100,15 @@ const ShopContextProvider = (props) => {
     return totalItem;
   };
 
-  const contextValue = { allProducts, cartItems, addToCart, removeFromCart, getTotalCartAmount, getTotalCartItems };
+  const contextValue = {
+    allProducts,
+    cartItems,
+    addToCart,
+    removeFromCart,
+    getTotalCartAmount,
+    getTotalCartItems,
+  };
+
   return <ShopContext.Provider value={contextValue}>{props.children}</ShopContext.Provider>;
 };
 

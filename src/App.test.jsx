@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/react";
+import { vi } from "vitest";
 import App from "./App";
 import ShopContextProvider from "./context/shopContext";
 
@@ -16,7 +17,7 @@ const renderApp = (route = "/") => {
 };
 
 beforeEach(() => {
-  global.fetch = jest.fn((url) =>
+  global.fetch = vi.fn((url) =>
     Promise.resolve({
       json: () =>
         Promise.resolve(/(allProducts|popularInWomen|newCollections)/.test(String(url)) ? products : []),
@@ -25,7 +26,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  jest.resetAllMocks();
+  vi.resetAllMocks();
   window.history.pushState({}, "", "/");
 });
 

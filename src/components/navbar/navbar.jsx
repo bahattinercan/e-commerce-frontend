@@ -1,6 +1,7 @@
 import React, { useContext, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { ShopContext } from "../../context/shopContext";
+import { baseUrl } from "../../helpers/Constants";
 import navDropdown from "../assets/arrow-right.png";
 import cartIcon from "../assets/cart_icon.png";
 import logo from "../assets/logo.png";
@@ -66,10 +67,18 @@ const Navbar = () => {
         </li>
       </ul>
       <div className="nav-login-cart">
-        {localStorage.getItem("auth-token") ? (
+        {localStorage.getItem("logged-in") === "1" ? (
           <button
-            onClick={() => {
-              localStorage.removeItem("auth-token");
+            onClick={async () => {
+              try {
+                await fetch(`${baseUrl}/logout`, {
+                  method: "POST",
+                  credentials: "include",
+                });
+              } catch (error) {
+                console.error("Logout failed:", error);
+              }
+              localStorage.removeItem("logged-in");
               window.location.replace("/");
             }}
           >
