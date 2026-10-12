@@ -7,6 +7,21 @@ export const ShopContext = createContext(null);
 // the token. This flag is only a UI hint (which button to show).
 const isLoggedIn = () => localStorage.getItem("logged-in") === "1";
 
+// The access cookie is short-lived; the refresh cookie renews it silently so the
+// cart survives a page reload after the access token expires.
+const restoreSession = async () => {
+  try {
+    const response = await fetch(`${baseUrl}/refresh`, { method: "POST", credentials: "include" });
+    if (response.ok) {
+      localStorage.setItem("logged-in", "1");
+      return true;
+    }
+  } catch (error) {
+    console.error("Could not restore session:", error);
+  }
+  return false;
+};
+
 const getDefaultCart = () => {
   let cart = {};
   for (let i = 0; i < 300 + 1; i++) {
@@ -20,25 +35,37 @@ const ShopContextProvider = (props) => {
   const [cartItems, setCartItems] = useState(getDefaultCart());
 
   useEffect(() => {
-    fetch(`${baseUrl}/allProducts`)
-      .then((response) => response.json())
-      .then((data) => setAllProducts(data))
-      .catch(() => setAllProducts([]));
+    const load = async () => {
+      try {
+        const products = await fetch(`${baseUrl}/allProducts`).then((response) => response.json());
+        setAllProducts(Array.isArray(products) ? products : []);
+      } catch (error) {
+        console.error("Could not load products:", error);
+        setAllProducts([]);
+      }
 
-    if (isLoggedIn()) {
-      fetch(`${baseUrl}/getCart`, {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: "",
-      })
-        .then((response) => response.json())
-        .then((data) => setCartItems(data || getDefaultCart()))
-        .catch(() => setCartItems(getDefaultCart()));
-    }
+      if (!(isLoggedIn() || (await restoreSession()))) {
+        return;
+      }
+
+      try {
+        const cart = await fetch(`${baseUrl}/getCart`, {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: "",
+        }).then((response) => response.json());
+        setCartItems(cart && Object.keys(cart).length ? cart : getDefaultCart());
+      } catch (error) {
+        console.error("Could not load cart:", error);
+        setCartItems(getDefaultCart());
+      }
+    };
+
+    load();
   }, []);
 
   const addToCart = (itemId) => {
