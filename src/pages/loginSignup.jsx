@@ -11,40 +11,50 @@ const LoginSignup = () => {
   };
   const login = async () => {
     let responseData;
-    await fetch(`${baseUrl}/login`, {
-      method: "POST",
-      headers: {
-        Accept: "application/form-data",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    })
-      .then((response) => response.json())
-      .then((data) => (responseData = data));
-    if (responseData.success) {
+    try {
+      await fetch(`${baseUrl}/login`, {
+        method: "POST",
+        headers: {
+          Accept: "application/form-data",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      })
+        .then((response) => response.json())
+        .then((data) => (responseData = data));
+    } catch (error) {
+      alert("Could not reach the server. Please try again.");
+      return;
+    }
+    if (responseData?.success) {
       localStorage.setItem("auth-token", responseData.token);
       window.location.replace("/");
     } else {
-      alert(responseData.errors);
+      alert(responseData?.errors ?? "Login failed.");
     }
   };
   const signup = async () => {
     let responseData;
-    await fetch(`${baseUrl}/signup`, {
-      method: "POST",
-      headers: {
-        Accept: "application/form-data",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    })
-      .then((response) => response.json())
-      .then((data) => (responseData = data));
-    if (responseData.success) {
+    try {
+      await fetch(`${baseUrl}/signup`, {
+        method: "POST",
+        headers: {
+          Accept: "application/form-data",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      })
+        .then((response) => response.json())
+        .then((data) => (responseData = data));
+    } catch (error) {
+      alert("Could not reach the server. Please try again.");
+      return;
+    }
+    if (responseData?.success) {
       localStorage.setItem("auth-token", responseData.token);
       window.location.replace("/");
     } else {
-      alert(responseData.errors);
+      alert(responseData?.errors ?? "Sign up failed.");
     }
   };
 

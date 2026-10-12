@@ -4,6 +4,9 @@ import "./breadcrum.css";
 
 function Breadcrum(props) {
   const { product } = props;
+  if (!product) {
+    return null;
+  }
   return (
     <div className="breadcrum">
       HOME <img src={arrowIcon} alt="" /> SHOP <img src={arrowIcon} alt="" /> {product.category}{" "}

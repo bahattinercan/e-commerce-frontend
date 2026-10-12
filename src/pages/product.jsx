@@ -11,6 +11,15 @@ const Product = () => {
   const { productId } = useParams();
   const product = allProducts.find((e) => e.id === Number(productId));
 
+  if (!product) {
+    return (
+      <div className="product-status">
+        <h2>{allProducts.length === 0 ? "Loading..." : "Product not found"}</h2>
+        {allProducts.length > 0 && <p>No product matches id “{productId}”.</p>}
+      </div>
+    );
+  }
+
   return (
     <div>
       <Breadcrum product={product} />

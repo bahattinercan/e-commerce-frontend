@@ -18,29 +18,27 @@ const ShopContextProvider = (props) => {
   useEffect(() => {
     fetch(`${baseUrl}/allProducts`)
       .then((response) => response.json())
-      .then((data) => setAllProducts(data));
+      .then((data) => setAllProducts(data))
+      .catch(() => setAllProducts([]));
 
     if (localStorage.getItem("auth-token")) {
-      try {
-        fetch(`${baseUrl}/getCart`, {
-          method: "POST",
-          headers: {
-            Accept: "application/data",
-            "auth-token": `${localStorage.getItem("auth-token")}`,
-            "Content-Type": "application/json",
-          },
-          body: "",
-        })
-          .then((response) => response.json())
-          .then((data) => setCartItems(data));
-      } catch (error) {
-        setCartItems([]);
-      }
+      fetch(`${baseUrl}/getCart`, {
+        method: "POST",
+        headers: {
+          Accept: "application/data",
+          "auth-token": `${localStorage.getItem("auth-token")}`,
+          "Content-Type": "application/json",
+        },
+        body: "",
+      })
+        .then((response) => response.json())
+        .then((data) => setCartItems(data))
+        .catch(() => setCartItems(getDefaultCart()));
     }
   }, []);
 
   const addToCart = (itemId) => {
-    setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] + 1 }));
+    setCartItems((prev) => ({ ...prev, [itemId]: (prev[itemId] || 0) + 1 }));
     if (localStorage.getItem("auth-token")) {
       fetch(`${baseUrl}/addToCart`, {
         method: "POST",
@@ -59,7 +57,7 @@ const ShopContextProvider = (props) => {
   };
 
   const removeFromCart = (itemId) => {
-    setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] - 1 }));
+    setCartItems((prev) => ({ ...prev, [itemId]: Math.max((prev[itemId] || 0) - 1, 0) }));
     if (localStorage.getItem("auth-token")) {
       fetch(`${baseUrl}/removeFromCart`, {
         method: "POST",
@@ -82,7 +80,9 @@ const ShopContextProvider = (props) => {
     for (const item in cartItems) {
       if (cartItems[item] > 0) {
         let itemInfo = allProducts.find((product) => product.id === Number(item));
-        totalAmount += itemInfo.new_price * cartItems[item];
+        if (itemInfo) {
+          totalAmount += itemInfo.new_price * cartItems[item];
+        }
       }
     }
     return totalAmount;
